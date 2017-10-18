@@ -60,8 +60,9 @@ JS;
                         <div class="form-group col-sm-6">
                             <?= $form->field($model, 'publish_at')->widget(DateTimePicker::class, [
                                 'clientOptions' => [
-                                    'format' => 'yyyy-mm-dd hh:ii Z',
-                                    'timezone' => 'UTC',
+                                    'format' => (\Yii::$app->controller->module->datepickerMinutes)
+                                        ? 'yyyy-mm-dd hh:ii:00'
+                                        : 'yyyy-mm-dd hh:00:00',
                                     'autoclose' => true,
                                     'todayHighlight' => true,
                                     'minView' => (\Yii::$app->controller->module->datepickerMinutes) ? 0 : 1,
@@ -72,8 +73,9 @@ JS;
                         <div class="form-group col-sm-6">
                             <?= $form->field($model, 'expire_at')->widget(DateTimePicker::class, [
                                 'clientOptions' => [
-                                    'format' => 'yyyy-mm-dd hh:ii Z',
-                                    'timezone' => 'UTC',
+                                    'format' => (\Yii::$app->controller->module->datepickerMinutes)
+                                        ? 'yyyy-mm-dd hh:ii:00'
+                                        : 'yyyy-mm-dd hh:00:00',
                                     'autoclose' => true,
                                     'todayHighlight' => true,
                                     'minView' => (\Yii::$app->controller->module->datepickerMinutes) ? 0 : 1,
@@ -81,8 +83,8 @@ JS;
                                 'clientEvents' => [],
                             ]) ?>
                         </div>
-                        <?= $form->field($model, 'timezone')->hiddenInput()->label(false) ?>
                     </div>
+                    <span><?= \Yii::t('widgets', 'Die dargestellte Zeit entspricht der UTC-Zeit.')?></span>
                 </div>
                 <?php } ?>
             </div>

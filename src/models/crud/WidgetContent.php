@@ -23,13 +23,6 @@ class WidgetContent extends BaseWidget
     public $name_id;
 
     /**
-     * Timezone field to calculate from client datetime to utc.
-     *
-     * @var string
-     */
-    public $timezone;
-
-    /**
      * @inheritdoc
      * @return array
      */
@@ -56,14 +49,6 @@ class WidgetContent extends BaseWidget
     {
         parent::afterFind();
         $this->setNameId($this->domain_id.'_'.$this->access_domain);
-
-        // convert date value for displaying
-        if($this->publish_at) {
-            $this->publish_at = \Yii::$app->formatter->asDatetime($this->publish_at, 'yyyy-MM-dd HH:mm ').date_default_timezone_get();
-        }
-        if($this->expire_at) {
-            $this->expire_at = \Yii::$app->formatter->asDatetime($this->expire_at, 'yyyy-MM-dd HH:mm ').date_default_timezone_get();
-        }
     }
 
     /**
@@ -122,19 +107,14 @@ class WidgetContent extends BaseWidget
                 [
                     'publish_at',
                     'datetime',
-                    'timestampAttribute' => 'publish_at',
-                    'format' => 'yyyy-MM-dd HH:mm z',
-                    'timestampAttributeFormat' => 'yyyy-MM-dd HH:mm',
+                    'format' => 'yyyy-MM-dd HH:mm:ss',
                 ],
                 [
                     'expire_at',
                     'datetime',
-                    'timestampAttribute' => 'expire_at',
-                    'format' => 'yyyy-MM-dd HH:mm z',
-                    'timestampAttributeFormat' => 'yyyy-MM-dd HH:mm',
+                    'format' => 'yyyy-MM-dd HH:mm:ss',
                 ],
                 ['expire_at', 'compare', 'compareAttribute' => 'publish_at', 'operator' => '>', 'type' => 'datetime'],
-                ['timezone', 'safe'],
             ]
         );
     }
@@ -172,16 +152,6 @@ class WidgetContent extends BaseWidget
 
             // ensure lowercase language id
             $this->access_domain = mb_strtolower($this->access_domain);
-
-            // convert date input mysql friendly
-           /* if($this->publish_at != '') {
-                $publishAt = $this->datetimeStringToUTCDate($this->publish_at);
-                $this->publish_at = $publishAt;
-            }
-            if($this->expire_at != '') {
-                $expireAt = $this->datetimeStringToUTCDate($this->expire_at);
-                $this->expire_at = $expireAt;
-            }*/
 
             return true;
         } else {
