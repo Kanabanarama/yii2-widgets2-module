@@ -8,6 +8,7 @@
 use hrzg\widget\Module;
 use kartik\select2\Select2;
 use zhuravljov\yii\widgets\DateTimePicker;
+use yii\helpers\Html;
 
 $userAuthItems = $model::getUsersAuthItems();
 ?>
@@ -58,30 +59,29 @@ JS;
                 <div class="panel-heading">
                     <div class="row">
                         <div class="form-group col-sm-6">
-                            <?= $form->field($model, 'publish_at')->widget(DateTimePicker::class, [
+                            <?= $form->field($model, 'publishAtLocalized')->widget(DateTimePicker::class, [
                                 'clientOptions' => [
-                                    'format' => 'yyyy-mm-dd hh:ii Z',
-                                    'timezone' => 'UTC',
+                                    'format' => 'yyyy-mm-dd hh:ii',
                                     'autoclose' => true,
                                     'todayHighlight' => true,
                                     'minView' => (\Yii::$app->controller->module->datepickerMinutes) ? 0 : 1,
                                 ],
                                 'clientEvents' => [],
                             ]) ?>
+                            <?= $form->field($model, 'publish_at')->hiddenInput(['id' => 'widgetcontent-publish_at'])->label(false) ?>
                         </div>
                         <div class="form-group col-sm-6">
-                            <?= $form->field($model, 'expire_at')->widget(DateTimePicker::class, [
+                            <?= $form->field($model, 'expireAtLocalized')->widget(DateTimePicker::class, [
                                 'clientOptions' => [
-                                    'format' => 'yyyy-mm-dd hh:ii Z',
-                                    'timezone' => 'UTC',
+                                    'format' => 'yyyy-mm-dd hh:ii',
                                     'autoclose' => true,
                                     'todayHighlight' => true,
                                     'minView' => (\Yii::$app->controller->module->datepickerMinutes) ? 0 : 1,
                                 ],
                                 'clientEvents' => [],
                             ]) ?>
+                            <?= $form->field($model, 'expire_at')->hiddenInput(['id' => 'widgetcontent-expire_at'])->label(false) ?>
                         </div>
-                        <?= $form->field($model, 'timezone')->hiddenInput()->label(false) ?>
                     </div>
                 </div>
                 <?php } ?>

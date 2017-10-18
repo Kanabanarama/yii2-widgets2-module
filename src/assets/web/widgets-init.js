@@ -137,3 +137,53 @@ $(document).on('pjax:complete', function () {
     console.log('template: reload success');
     editor.trigger('change');
 });
+
+
+$(document).on('ready', function() {
+    var localOffset = (new Date()).getTimezoneOffset();
+
+    var publishAtInputLocal = $('#widgetcontent-publishatlocalized');
+    var publishAtInputUTC = $('#widgetcontent-publish_at');
+    var expireAtInputLocal = $('#widgetcontent-expireatlocalized');
+    var expireAtInputUTC = $('#widgetcontent-expire_at');
+
+    function utcToLocal(utcDate) {
+        utcDate.setMinutes(utcDate.getMinutes() - localOffset);
+        var localDateString = utcDate.toISOString().substr(0, 16).replace('T', ' ');
+
+        return localDateString;
+    }
+
+    // convert utc dates from db into local date
+    if(publishAtInputUTC.val()) {
+        var publishUtcDate = new Date(publishAtInputUTC.val());
+        if(!isNaN(publishUtcDate.getTime())) {
+            publishAtInputLocal.val(utcToLocal(publishUtcDate));
+        }
+    }
+
+    if(expireAtInputUTC.val()) {
+        var expireUtcDate = new Date(expireAtInputUTC.val());
+        if(!isNaN(expireUtcDate.getTime())) {
+            expireAtInputLocal.val(utcToLocal(expireUtcDate));
+        }
+    }
+
+    // hidden fields with utc date
+    publishAtInputLocal.on('change', function() {
+        var localPublishDate = new Date(publishAtInputLocal.val());
+        if(!isNaN(localPublishDate.getTime())) {
+            var utcPublishString = localPublishDate.toISOString().substr(0, 16).replace('T', ' ')+' UTC';
+            publishAtInputUTC.val(utcPublishString);
+        }
+    });
+
+    expireAtInputLocal.on('change', function() {
+        var localExpireDate = new Date(expireAtInputLocal.val());
+        if(!isNaN(localExpireDate.getTime())) {
+            var utcExpireString = localExpireDate.toISOString().substr(0, 16).replace('T', ' ')+' UTC';
+            expireAtInputUTC.val(utcExpireString);
+        }
+    });
+
+});
